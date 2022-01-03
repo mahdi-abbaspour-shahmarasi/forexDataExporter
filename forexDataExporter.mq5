@@ -49,7 +49,7 @@ int OnInit()
    currentCandleNo=iBars(Symbol(),PERIOD_CURRENT); 
    int f=FileOpen("data.csv",FILE_READ|FILE_WRITE|FILE_TXT);
       FileSeek(f,0,SEEK_END);
-      FileWrite(f,"DateTime,Open,High,Low,Close,Ma9,MA26,MA52,MA104,RSI"); 
+      FileWrite(f,"DateTime,Open,High,Low,Close,Ma9,MA26,MA52,MA104,MA200,RSI"); 
       FileFlush(f);    
       FileClose(f);
    return(INIT_SUCCEEDED);
@@ -93,7 +93,7 @@ void OnTick()
       ArraySetAsSeries (movingAverageValues200, true);
       CopyBuffer(ma200,0, 0, 100, movingAverageValues200);
       
-      double rsi=iRSI (Symbol(),PERIOD_CURRENT,14,PRICE_CLOSE);
+      double rsi=iRSI (Symbol(),PERIOD_CURRENT,ma_period,applied_price_rsi);
       double rsiArray[];
       ArraySetAsSeries(rsiArray, true);
       CopyBuffer(rsi,0,0,100,rsiArray);
@@ -114,6 +114,7 @@ void OnTick()
                                  +DoubleToString(movingAverageValues26[0])+","
                                  +DoubleToString(movingAverageValues52[0])+","
                                  +DoubleToString(movingAverageValues104[0])+","
+                                 +DoubleToString(movingAverageValues200[0])+","
                                  +DoubleToString(rsiArray[0])); 
        FileFlush(h);    
        FileClose(h);
