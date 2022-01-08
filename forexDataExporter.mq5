@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                               fxDataExporter.mq5 |
+//|                                            forexDataExporter.mq5 |
 //|                                  Copyright 2022, MetaQuotes Ltd. |
 //|                                       https://www.m-abbaspour.ir |
 //|                                              http://www.topon.ir |
