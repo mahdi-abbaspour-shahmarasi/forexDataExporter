@@ -5,7 +5,7 @@
 //|                                              http://www.topon.ir |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2022, MetaQuotes Ltd."
-#property link      "http://www.topon.ir/"
+#property link      "https://www.m-abbaspour.ir/"
 #property version   "1.10"
 
 //+------------------------------------------------------------------+
