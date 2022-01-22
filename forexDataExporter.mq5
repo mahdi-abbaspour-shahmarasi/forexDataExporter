@@ -8,6 +8,7 @@
 #property link      "https://www.m-abbaspour.ir/"
 #property version   "1.10"
 
+#define MAX_COUNT 50
 //+------------------------------------------------------------------+
 //| Indicators Settings                                   |
 //+------------------------------------------------------------------+
@@ -40,6 +41,18 @@ input int ma_shift_4th = 1;
 input ENUM_MA_METHOD ma_method_4th = MODE_EMA;
 input ENUM_APPLIED_PRICE applied_price_4th = PRICE_TYPICAL;
 //___________________________________________________________________
+<<<<<<< HEAD
+input group    "__MA_200 Settings__";
+input int ma_shift_200 = 1;
+input ENUM_MA_METHOD ma_method_200 = MODE_SMA;
+input ENUM_APPLIED_PRICE applied_price_200 = PRICE_CLOSE;  
+//___________________________________________________________________
+input group    "__Ichimouko Settings__";
+input int tk_period = 9;
+input int kj_period = 26;
+input int senkou_span_b = 52;
+input int shift = 0;
+//___________________________________________________________________
 input group    "__ 5th_MA Settings __";
 input int ma_period_5th = 200;
 input int ma_shift_5th = 1;
@@ -55,7 +68,7 @@ int OnInit()
    currentCandleNo=iBars(Symbol(),PERIOD_CURRENT); 
    int f=FileOpen(Symbol()+"_"+EnumToString(Period())+".csv",FILE_READ|FILE_WRITE|FILE_TXT);
       FileSeek(f,0,SEEK_END);
-      FileWrite(f,"DateTime,Open,High,Low,Close,Ma"+string(ma_period_1st)+",MA"+string(ma_period_2nd)+",MA"+string(ma_period_3rd)+",MA"+string(ma_period_4th)+",MA"+string(ma_period_5th)+",RSI"); 
+      FileWrite(f,"DateTime,Open,High,Low,Close,Ma"+string(ma_period_1st)+",MA"+string(ma_period_2nd)+",MA"+string(ma_period_3rd)+",MA"+string(ma_period_4th)+",MA"+string(ma_period_5th)+",RSI,TENKAN,KIJUN,SPAN_A,SPAN_B,CHIKOU_SPAN"); 
       FileFlush(f);    
       FileClose(f);
    return(INIT_SUCCEEDED);
@@ -103,7 +116,36 @@ void OnTick()
       double rsiArray[];
       ArraySetAsSeries(rsiArray, true);
       CopyBuffer(rsi,0,0,100,rsiArray);
+
+      double ichi=iIchimoku(Symbol(), PERIOD_CURRENT, tk_period, kj_period, senkou_span_b);
+      double tenkan[];
+      double kijun[];
+      double span_a[];
+      double span_b[];
+      double chikou_span[];
+      ArraySetAsSeries(tenkan, true);
+      ArraySetAsSeries(kijun, true);
+      ArraySetAsSeries(span_a, true);
+      ArraySetAsSeries(span_b, true);
+      ArraySetAsSeries(chikou_span, true);
       
+      CopyBuffer(ichi, 0, 0, MAX_COUNT,tenkan);
+	   //double value = NormalizeDouble(tenkan[shift],_Digits);
+	   
+	   CopyBuffer(ichi, 1, 0, MAX_COUNT, kijun);
+      //double value = NormalizeDouble(kijun[pShift], _Digits);
+      
+      CopyBuffer(ichi, 2, 0, MAX_COUNT, span_a);
+      //double value = NormalizeDouble(span_a[pShift], _Digits);
+      
+      CopyBuffer(ichi, 3, 0, MAX_COUNT, span_b);
+      //double value = NormalizeDouble(span_b[pShift], _Digits);
+      
+      CopyBuffer(ichi, 4, 0, MAX_COUNT, chikou_span);
+      //double value = NormalizeDouble(chikou_span[pShift], _Digits);
+      
+      int h=FileOpen("data.csv",FILE_READ|FILE_WRITE|FILE_TXT);
+
       int h=FileOpen(Symbol()+"_"+EnumToString(Period())+".csv",FILE_READ|FILE_WRITE|FILE_TXT);
       
       if(h==INVALID_HANDLE)
@@ -116,12 +158,22 @@ void OnTick()
                                  +DoubleToString(high)+","
                                  +DoubleToString(low)+","
                                  +DoubleToString(close)+","
+                                 +DoubleToString(movingAverageValues9[0])+","
+                                 +DoubleToString(movingAverageValues26[0])+","
+                                 +DoubleToString(movingAverageValues52[0])+","
+                                 +DoubleToString(movingAverageValues104[0])+","
+                                 +DoubleToString(movingAverageValues200[0])+","
+                                 +DoubleToString(tenkan[0])+","
+                                 +DoubleToString(kijun[0])+","
+                                 +DoubleToString(span_a[0])+","
+                                 +DoubleToString(span_b[0])+","
+                                 +DoubleToString(chikou_span[0])); 
                                  +DoubleToString(movingAverageValues_1st[0])+","
                                  +DoubleToString(movingAverageValues_2nd[0])+","
                                  +DoubleToString(movingAverageValues_3rd[0])+","
                                  +DoubleToString(movingAverageValues_4th[0])+","
                                  +DoubleToString(movingAverageValues_5th[0])+","
-                                 +DoubleToString(rsiArray[0])); 
+                                 +DoubleToString(rsiArray[0]));
        FileFlush(h);    
        FileClose(h);
        currentCandleNo=number;
